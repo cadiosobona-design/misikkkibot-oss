@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "misikkkibot-oss"
+version = "0.1.0"
+description = "Clean-room, paper-first crypto strategy workstation MVP"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+authors = [{ name = "MisikkkiBot OSS Contributors" }]
+dependencies = []
+
+[project.scripts]
+misikkki = "misikkki_core.cli:main"
+misikkki-desktop = "misikkki_desktop.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3,<9",
+]
+
+[tool.setuptools.packages.find]
+where = [
+  "apps/desktop/src",
+  "packages/audit/src",
+  "packages/backtest/src",
+  "packages/connectors/src",
+  "packages/core/src",
+  "packages/risk/src",
+  "packages/security/src",
+  "packages/storage/src",
+]
+
+[tool.setuptools.package-data]
+misikkki_storage = ["migrations/*.sql"]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "apps",
+  "packages",
+  "tests",
+]
+pythonpath = [
+  "apps/desktop/src",
+  "packages/audit/src",
+  "packages/backtest/src",
+  "packages/connectors/src",
+  "packages/core/src",
+  "packages/risk/src",
+  "packages/security/src",
+  "packages/storage/src",
+]
