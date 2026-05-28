@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  release-gate:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Sync dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest
+
+      - name: Compile source
+        run: python -m compileall apps packages tests
+
+      - name: Run paper demo smoke
+        run: uv run misikkki paper-demo --max-bars 6
+
+      - name: Verify no live trading
+        run: uv run misikkki verify-no-live
+
+      - name: Run desktop headless smoke
+        run: uv run misikkki-desktop --headless
