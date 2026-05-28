@@ -1,0 +1,11 @@
+MisikkkiBot OSS
+Copyright 2026
+
+This product includes first-party clean-room implementation code licensed
+under the Apache License, Version 2.0.
+
+The MVP intentionally uses only Python standard-library runtime components.
+Development and test tooling is documented in docs/license-review.md.
+
+No code, resources, strings, or hidden behavior were copied from the referenced
+proprietary binary.
