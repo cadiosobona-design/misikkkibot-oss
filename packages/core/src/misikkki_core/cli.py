@@ -10,6 +10,7 @@ from misikkki_core.strategy import MovingAverageCrossoverStrategy
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="misikkki", description="MisikkkiBot OSS clean-room MVP")
+    parser.set_defaults(command="paper-demo", data=None, database=None, audit_log=None, max_bars=None)
     subcommands = parser.add_subparsers(dest="command")
 
     paper_demo = subcommands.add_parser("paper-demo", help="Run the no-credential paper-trading demo")

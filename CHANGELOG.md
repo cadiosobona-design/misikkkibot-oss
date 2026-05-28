@@ -16,6 +16,10 @@ Initial MisikkkiBot OSS MVP source release candidate.
 - Standard-library desktop launcher with CI-safe headless smoke mode.
 - Apache-2.0 license posture with NOTICE, clean-room, threat-model, license-review, exchange-connector, and live-trading-gate documentation.
 
+### Fixed
+
+- No-subcommand `misikkki` invocation now uses paper-demo defaults instead of raising an argparse namespace error.
+
 ### Not Included
 
 - Live-money trading.
