@@ -18,8 +18,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.headless:
         result = run_paper_demo()
         print("MisikkkiBot OSS desktop headless smoke complete")
+        print("paper_trading_default=true")
+        print("live_trading_available=false")
+        print("credentials_required=false")
         print(f"session_id={result.session_id}")
         print(f"orders={result.summary['orders']}")
+        print(f"risk_decisions={result.summary['risk_decisions']}")
+        print(f"blocked_orders={result.summary['blocked_orders']}")
+        print(f"database={result.database_path}")
         print(f"audit_log={result.audit_log_path}")
         return 0
 
@@ -30,6 +36,10 @@ def main(argv: list[str] | None = None) -> int:
         print("GUI display unavailable; ran headless paper flow instead")
         print(f"session_id={result.session_id}")
         print(f"orders={result.summary['orders']}")
+        print(f"risk_decisions={result.summary['risk_decisions']}")
+        print(f"blocked_orders={result.summary['blocked_orders']}")
+        print(f"database={result.database_path}")
+        print(f"audit_log={result.audit_log_path}")
     return 0
 
 
@@ -77,4 +87,5 @@ def launch_window() -> None:
     tk.Button(controls, text="Kill Switch", command=kill_switch, width=14).pack(side="left")
 
     append("Ready. Paper trading is the default; live trading is unavailable in this MVP.")
+    append("No exchange credentials are required for the bundled sample replay.")
     root.mainloop()

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from datetime import datetime
+from importlib.resources import files
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -11,7 +12,6 @@ from misikkki_audit.log import AuditEvent
 from misikkki_core.models import Candle, Order, Position
 from misikkki_risk.engine import RiskDecision
 from misikkki_security.redaction import redact_payload
-from misikkki_storage.schema import INITIAL_SCHEMA
 
 
 class OrderReconciliationError(RuntimeError):
@@ -31,7 +31,8 @@ class SQLiteRepository:
 
     def apply_migrations(self) -> None:
         with self.connect() as connection:
-            connection.executescript(INITIAL_SCHEMA)
+            for script in _migration_scripts():
+                connection.executescript(script)
 
     def create_session(
         self,
@@ -288,3 +289,12 @@ class SQLiteRepository:
             "risk_decisions": risk_count,
             "blocked_orders": blocked_count,
         }
+
+
+def _migration_scripts() -> list[str]:
+    migrations = files("misikkki_storage").joinpath("migrations")
+    return [
+        migration.read_text(encoding="utf-8")
+        for migration in sorted(migrations.iterdir(), key=lambda item: item.name)
+        if migration.name.endswith(".sql")
+    ]

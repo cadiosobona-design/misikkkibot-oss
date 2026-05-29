@@ -2,7 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import sys
 from dataclasses import dataclass
+from importlib.resources import files
+from importlib.resources.abc import Traversable
 from pathlib import Path
 from uuid import uuid4
 
@@ -18,7 +22,7 @@ from misikkki_storage import SQLiteRepository
 
 @dataclass(frozen=True)
 class PaperDemoConfig:
-    sample_path: Path
+    sample_path: Path | Traversable
     database_path: Path
     audit_log_path: Path
     max_bars: int | None = None
@@ -33,15 +37,28 @@ class PaperDemoResult:
     summary: dict[str, object]
 
 
-def default_sample_path() -> Path:
+def default_sample_path() -> Path | Traversable:
     cwd_candidate = Path.cwd() / "sample_data" / "btc_usdt_1m.csv"
     if cwd_candidate.exists():
         return cwd_candidate
-    return Path(__file__).resolve().parents[4] / "sample_data" / "btc_usdt_1m.csv"
+    return files("misikkki_data").joinpath("sample_data", "btc_usdt_1m.csv")
+
+
+def default_runtime_dir() -> Path:
+    override = os.environ.get("MISIKKKI_RUNTIME_DIR")
+    if override:
+        return Path(override)
+
+    if getattr(sys, "frozen", False):
+        local_app_data = os.environ.get("LOCALAPPDATA")
+        base_dir = Path(local_app_data) if local_app_data else Path.home() / "AppData" / "Local"
+        return base_dir / "MisikkkiBot" / "runtime"
+
+    return Path.cwd() / ".misikkki"
 
 
 def default_config() -> PaperDemoConfig:
-    runtime_dir = Path.cwd() / ".misikkki"
+    runtime_dir = default_runtime_dir()
     return PaperDemoConfig(
         sample_path=default_sample_path(),
         database_path=runtime_dir / "demo.sqlite",

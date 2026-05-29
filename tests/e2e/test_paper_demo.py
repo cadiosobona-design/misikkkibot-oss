@@ -1,8 +1,15 @@
 import json
 import sqlite3
+import sys
 from pathlib import Path
 
-from misikkki_core.engine import PaperDemoConfig, run_paper_demo, trigger_demo_kill_switch
+from misikkki_core.engine import (
+    PaperDemoConfig,
+    default_runtime_dir,
+    default_sample_path,
+    run_paper_demo,
+    trigger_demo_kill_switch,
+)
 
 
 def test_paper_demo_runs_without_credentials_and_records_audit(tmp_path: Path):
@@ -48,3 +55,21 @@ def test_kill_switch_audit_event_is_persisted(tmp_path: Path):
 
     assert payload["event"] == "kill_switch_activated"
     assert "kill_switch_activated" in result.audit_log_path.read_text(encoding="utf-8")
+
+
+def test_default_sample_data_is_loaded_from_package_resource(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+
+    sample = default_sample_path()
+
+    assert sample.name == "btc_usdt_1m.csv"
+    assert "misikkki_data" in str(sample).replace("\\", "/")
+    assert run_paper_demo().summary["orders"] >= 1
+
+
+def test_frozen_runtime_defaults_to_user_local_app_data(tmp_path: Path, monkeypatch):
+    local_app_data = tmp_path / "LocalAppData"
+    monkeypatch.setenv("LOCALAPPDATA", str(local_app_data))
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+
+    assert default_runtime_dir() == local_app_data / "MisikkkiBot" / "runtime"

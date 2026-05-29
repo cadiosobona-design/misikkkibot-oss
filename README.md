@@ -2,7 +2,7 @@
 
 Clean-room, local-first crypto strategy workstation MVP.
 
-This repository is source-first and paper-first. It does not execute, decompile, or reproduce hidden behavior from any proprietary executable. The default workflow runs a bundled sample market replay with no exchange credentials.
+This repository is source-first and paper-first. It does not execute, decompile, or reproduce hidden behavior from any proprietary executable. The default workflow runs a packaged sample market replay with no exchange credentials.
 
 ## What Is Included
 
@@ -13,6 +13,7 @@ This repository is source-first and paper-first. It does not execute, decompile,
 - Fake sandbox connector contract tests that require no credentials.
 - Guarded Binance Spot Testnet adapter configuration that refuses live endpoints and withdrawal-capable permissions.
 - A small desktop launcher built with the Python standard-library Tk toolkit, plus a headless mode for CI and servers.
+- Windows packaging assets for a local `MisikkkiBot-0.1.1-win-x64.zip` bundle.
 
 ## Quick Start
 
@@ -36,6 +37,9 @@ The paper demo writes local runtime files under `.misikkki/` by default:
 
 These files are generated artifacts and are not needed to inspect the source.
 
+The installed wheel also works from an empty working directory because sample data
+and storage migrations are packaged as Python package resources.
+
 ## Run The Desktop Launcher
 
 ```powershell
@@ -49,6 +53,35 @@ uv run misikkki-desktop --headless
 ```
 
 The launcher exposes the first-run paper demo and a visible kill-switch control. Trading behavior remains in the testable core packages; the UI does not call exchange clients directly.
+
+When the app is packaged as a Windows executable, runtime files are written under
+`%LOCALAPPDATA%\MisikkkiBot\runtime` by default so launching from an extracted zip
+or shortcut does not require writes to the install directory. Set
+`MISIKKKI_RUNTIME_DIR` to override this location.
+
+## Build The Windows Local Bundle
+
+Run this on Windows from the repository root:
+
+```powershell
+.\scripts\build-windows.ps1
+```
+
+The script runs the Python test/build gate, builds the PyInstaller one-directory
+bundle, creates `dist\MisikkkiBot-0.1.1-win-x64.zip`, and writes
+`dist\SHA256SUMS.txt`.
+
+Smoke commands after extracting the zip:
+
+```powershell
+.\misikkki.exe paper-demo --max-bars 6
+.\misikkki.exe verify-no-live
+.\MisikkkiBot.exe --headless
+```
+
+The MVP Windows artifact is unsigned. Verify downloaded artifacts with
+`SHA256SUMS.txt`. Native Linux and macOS executable bundles are not part of this
+release slice; use the source or wheel path on those systems.
 
 ## Inspect Strategy Parameters
 

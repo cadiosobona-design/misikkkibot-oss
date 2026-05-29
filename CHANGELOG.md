@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.1 - 2026-05-29
+
+- Package the bundled BTC/USDT sample data as a Python package resource so the
+  installed wheel works outside a repository checkout.
+- Load SQLite storage migrations from packaged SQL resources.
+- Add Windows PyInstaller packaging assets for
+  `MisikkkiBot-0.1.1-win-x64.zip`.
+- Use a user-local packaged runtime directory under
+  `%LOCALAPPDATA%\MisikkkiBot\runtime` for frozen Windows builds.
+- Document first-run safety, checksums, unsigned artifact status, and the
+  Windows-first packaging limitation.
+
 ## 0.1.0 - 2026-05-28
 
 Initial MisikkkiBot OSS MVP source release candidate.

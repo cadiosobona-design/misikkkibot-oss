@@ -1,0 +1,27 @@
+MisikkkiBot OSS v0.1.1 first run
+
+Paper trading is the default. Live-money trading is unavailable in this MVP.
+No exchange credentials are required for the bundled paper demo.
+Do not enter withdrawal-capable keys into any MisikkkiBot OSS path.
+
+Quick smoke commands from the extracted zip directory:
+
+  .\misikkki.exe paper-demo --max-bars 6
+  .\misikkki.exe verify-no-live
+  .\MisikkkiBot.exe --headless
+
+Packaged runtime files are written under:
+
+  %LOCALAPPDATA%\MisikkkiBot\runtime
+
+The paper demo records:
+
+  - session id
+  - paper orders
+  - risk decisions and blocked orders
+  - SQLite database path
+  - append-only audit log path
+
+The desktop launcher exposes a visible kill-switch control. This project makes
+no profitability claims and is not financial advice.
+
