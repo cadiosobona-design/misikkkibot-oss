@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "misikkkibot-oss"
-version = "0.1.0"
+version = "0.1.1"
 description = "Clean-room, paper-first crypto strategy workstation MVP"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -18,12 +18,15 @@ misikkki-desktop = "misikkki_desktop.cli:main"
 
 [dependency-groups]
 dev = [
+  "build>=1.2,<2",
+  "pyinstaller>=6.13,<7",
   "pytest>=8.3,<9",
 ]
 
 [tool.setuptools.packages.find]
 where = [
   "apps/desktop/src",
+  "packages/data/src",
   "packages/audit/src",
   "packages/backtest/src",
   "packages/connectors/src",
@@ -34,6 +37,7 @@ where = [
 ]
 
 [tool.setuptools.package-data]
+misikkki_data = ["sample_data/*.csv", "sample_data/*.md"]
 misikkki_storage = ["migrations/*.sql"]
 
 [tool.pytest.ini_options]
@@ -44,6 +48,7 @@ testpaths = [
 ]
 pythonpath = [
   "apps/desktop/src",
+  "packages/data/src",
   "packages/audit/src",
   "packages/backtest/src",
   "packages/connectors/src",
